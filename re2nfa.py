@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib
 import os
+from generateRE import generateRE
 from collections import deque
 
 '''
@@ -118,16 +119,19 @@ def isTerminalSymbol(char):
     return not char in controlSymbols()
 
 def storeAsJPG(mg, name='nfa'):
-    nx.draw_graphviz(mg.graph)
-    nx.write_dot(mg.graph, name + '.dot')
+    nx.draw_graphviz(mg)
+    nx.write_dot(mg, name + '.dot')
     os.system('dot -Tjpg ' + name + '.dot -o ' + name + '.jpg')
     os.system('open ' + name + '.jpg')
 
-def main():
-    input_str = "ba|ab|(c|a)*a"
+def getAllTerminals(re):
+    return set([char for char in re if isTerminalSymbol(char)])
+
+def test():
+    input_str = generateRE.generateRE()
     mg = convert(input_str)
-    storeAsJPG(mg)
+    storeAsJPG(mg.graph)
 
 
 if __name__ == '__main__':
-    main()
+    test()

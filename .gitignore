@@ -21,6 +21,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+*.jpg
+*.dot
 test.py
 
 # PyInstaller
