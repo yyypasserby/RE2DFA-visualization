@@ -38,41 +38,41 @@ def findNextTerminalClosure(list_node, mg, terminal):
 
 def constructDFA(terminal_table, mg):
     all_sets = []
+    acceptable_states = []
     transition_table = {}
     not_complete_sets = deque()
-    not_complete_sets.append(findEpsilonClosure(mg.first, mg.graph))
+    first_set = findEpsilonClosure(mg.first, mg.graph)
+    not_complete_sets.append(first_set)
+    all_sets.append(frozenset(first_set))
     while len(not_complete_sets) != 0:
         t_set = not_complete_sets.popleft()
-        all_sets.append(frozenset(t_set))
+        if mg.last in t_set:
+            acceptable_states.append(frozenset(t_set))
         t_dict = {}
         for terminal in terminal_table:
             ntc = findNextTerminalClosure(t_set, mg.graph, terminal)
             t_dict[terminal] = frozenset(ntc)
             if frozenset(ntc) not in all_sets:
-                not_complete_sets.append(ntc)
+                not_complete_sets.append(ntc.copy())
+                all_sets.append(frozenset(ntc))
         transition_table[frozenset(t_set)] = t_dict
 
-    return transition_table, all_sets
+    return transition_table, all_sets, acceptable_states
 
-def showDFA(transition_table, all_sets):
+def showDFA(transition_table, all_sets, acceptable_states):
     reverse = {}
     cnt = 0
     for m_set in all_sets:
-        if len(m_set) != 0:
-            reverse[m_set] = cnt
-            cnt += 1
-
+        reverse[m_set] = cnt
+        cnt += 1
     g = nx.MultiDiGraph()
     for k,v in transition_table.items():
-        if len(k) == 0:
-            continue
         f = reverse[k]
         for tran, next_set in v.items():
-            if len(next_set) == 0:
-                continue
             g.add_edge(f, reverse[next_set], label=tran)
-    
-    return g
+    for state in acceptable_states:
+        g.node[reverse[state]]['label'] = 'accept'
+    return g, reverse
 
 def test():
     re = generateRE()
@@ -80,11 +80,12 @@ def test():
     print terminal_table
     mg = r2n.convert(re)
     r2n.storeAsJPG(mg.graph)
-    transition_table, all_sets = constructDFA(terminal_table, mg)
+    transition_table, all_sets, acceptable_states = constructDFA(terminal_table, mg)
+    print acceptable_states
     for t_set in all_sets:
         print t_set, transition_table[t_set] 
 
-    mg = showDFA(transition_table, all_sets)
+    mg = showDFA(transition_table, all_sets, acceptable_states)
     r2n.storeAsJPG(mg, 'dfa')
     print re
         
