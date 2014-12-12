@@ -3,16 +3,7 @@ import matplotlib
 import os
 from generateRE import generateRE
 from collections import deque
-
-'''
-in this version we only define three kinds of control symbols:
-1) *
-2) |
-3) ()
-
-all the other things is terminal symbols
-'''
-
+import public
 
 next_node = -1 
 def nextNode():
@@ -46,7 +37,7 @@ def convertTerminal2MG(terminal):
     mg.graph.add_edge(mg.first, mg.last, label=terminal)
     return mg
 
-def convert(input_str):
+def re2nfa(input_str):
     if len(input_str) == 0:
         return False
     mg_stack = []
@@ -56,7 +47,7 @@ def convert(input_str):
         if isControlSymbol(char):
             if char == '(':
                 pos = findParenthesis(input_str, i + 1)
-                sub_mg = convert(input_str[i + 1 : pos])
+                sub_mg = re2nfa(input_str[i + 1 : pos])
                 mg_stack.append(sub_mg)
                 i = pos + 1
             if char == '*':
@@ -92,7 +83,6 @@ def convert(input_str):
         union(ret_mg, prev)
     return ret_mg
 
-
 def union(mg1, mg2):
     mg1.graph = nx.union(mg1.graph, mg2.graph)
     mg1.graph.add_edge(mg1.first, mg2.first, label='epsilon')
@@ -118,20 +108,13 @@ def isControlSymbol(char):
 def isTerminalSymbol(char):
     return not char in controlSymbols()
 
-def storeAsJPG(mg, name='nfa'):
-    nx.draw_graphviz(mg)
-    nx.write_dot(mg, name + '.dot')
-    os.system('dot -Tjpg ' + name + '.dot -o ' + name + '.jpg')
-    os.system('open ' + name + '.jpg')
-
 def getAllTerminals(re):
     return set([char for char in re if isTerminalSymbol(char)])
 
 def test():
-    input_str = generateRE.generateRE()
-    mg = convert(input_str)
-    storeAsJPG(mg.graph)
-
+    input_str = generateRE()
+    mg = re2nfa(input_str)
+    public.storeAsJPG(mg.graph)
 
 if __name__ == '__main__':
     test()

@@ -2,7 +2,7 @@ import re2nfa as r2n
 import networkx as nx
 from collections import deque
 from generateRE import generateRE
-
+import public
 
 def findEpsilonClosure(node, mg):
     epsilon_closure = [node]
@@ -15,7 +15,6 @@ def findEpsilonClosure(node, mg):
                 epsilon_closure.append(next_node)
                 traversal_q.append(next_node)
         traversal_q.popleft()
-
     return set(epsilon_closure)
 
 def findNextTerminalClosure(list_node, mg, terminal):
@@ -36,7 +35,7 @@ def findNextTerminalClosure(list_node, mg, terminal):
         node_deque.popleft()
     return node_set
 
-def constructDFA(terminal_table, mg):
+def constructTransitionTable(terminal_table, mg):
     all_sets = []
     acceptable_states = []
     transition_table = {}
@@ -59,7 +58,7 @@ def constructDFA(terminal_table, mg):
 
     return transition_table, all_sets, acceptable_states
 
-def showDFA(transition_table, all_sets, acceptable_states):
+def constructDFA(transition_table, all_sets, acceptable_states):
     reverse = {}
     cnt = 0
     for m_set in all_sets:
@@ -78,16 +77,15 @@ def test():
     re = generateRE()
     terminal_table = r2n.getAllTerminals(re)
     print terminal_table
-    mg = r2n.convert(re)
-    r2n.storeAsJPG(mg.graph)
-    transition_table, all_sets, acceptable_states = constructDFA(terminal_table, mg)
+    mg = r2n.re2nfa(re)
+    public.storeAsJPG(mg.graph)
+    transition_table, all_sets, acceptable_states = constructTransitionTable(terminal_table, mg)
     print acceptable_states
     for t_set in all_sets:
         print t_set, transition_table[t_set] 
 
-    mg = showDFA(transition_table, all_sets, acceptable_states)
-    r2n.storeAsJPG(mg, 'dfa')
-    print re
+    mg, reverse = constructDFA(transition_table, all_sets, acceptable_states)
+    public.storeAsJPG(mg, 'dfa')
         
 
 if __name__ == '__main__':

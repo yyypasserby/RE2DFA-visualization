@@ -1,2 +1,2 @@
 def generateRE():
-    return "b(a|b*|c)c|a"
+    return "(a*|b*)c"
