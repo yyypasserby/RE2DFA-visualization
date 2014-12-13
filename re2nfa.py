@@ -112,9 +112,10 @@ def getAllTerminals(re):
     return set([char for char in re if isTerminalSymbol(char)])
 
 def re2nfa(input_str):
-    convert(input_str)
+    mg = convert(input_str)
     global next_node
     next_node = -1
+    return mg
 
 def test():
     input_str = generateRE()

@@ -76,16 +76,12 @@ def constructDFA(transition_table, all_sets, acceptable_states):
 def test():
     re = generateRE()
     terminal_table = r2n.getAllTerminals(re)
-    print terminal_table
-    mg = r2n.re2nfa(re)
-    public.storeAsJPG(mg.graph)
-    transition_table, all_sets, acceptable_states = constructTransitionTable(terminal_table, mg)
-    print acceptable_states
-    for t_set in all_sets:
-        print t_set, transition_table[t_set] 
+    nfa = r2n.re2nfa(re)
+    public.storeAsJPG(nfa.graph, 'nfa')
 
-    mg, reverse = constructDFA(transition_table, all_sets, acceptable_states)
-    public.storeAsJPG(mg, 'dfa')
+    transition_table, all_sets, acceptable_states = constructTransitionTable(terminal_table, nfa)
+    dfa, reverse = constructDFA(transition_table, all_sets, acceptable_states)
+    public.storeAsJPG(dfa, 'dfa')
         
 
 if __name__ == '__main__':
