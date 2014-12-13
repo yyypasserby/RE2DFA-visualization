@@ -37,7 +37,7 @@ def convertTerminal2MG(terminal):
     mg.graph.add_edge(mg.first, mg.last, label=terminal)
     return mg
 
-def re2nfa(input_str):
+def convert(input_str):
     if len(input_str) == 0:
         return False
     mg_stack = []
@@ -47,7 +47,7 @@ def re2nfa(input_str):
         if isControlSymbol(char):
             if char == '(':
                 pos = findParenthesis(input_str, i + 1)
-                sub_mg = re2nfa(input_str[i + 1 : pos])
+                sub_mg = convert(input_str[i + 1 : pos])
                 mg_stack.append(sub_mg)
                 i = pos + 1
             if char == '*':
@@ -110,6 +110,11 @@ def isTerminalSymbol(char):
 
 def getAllTerminals(re):
     return set([char for char in re if isTerminalSymbol(char)])
+
+def re2nfa(input_str):
+    convert(input_str)
+    global next_node
+    next_node = -1
 
 def test():
     input_str = generateRE()
