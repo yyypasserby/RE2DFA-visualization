@@ -25,7 +25,6 @@ def findParenthesis(string, pos):
         if string[i] == ')':
             temp += 1
             if temp == 0:
-                print string[pos : i]
                 return i
         i += 1
     raise Exception("Could not find a corresponding parenthesis")
@@ -59,12 +58,7 @@ def convert(input_str):
                 mg_stack.append(char)
                 i += 1
         elif isTerminalSymbol(char):
-            if len(mg_stack) != 0 and not mg_stack[-1] == '|':
-                prev = mg_stack.pop()
-                prev = concat(prev, convertTerminal2MG(char))
-                mg_stack.append(prev)
-            else:
-                mg_stack.append(convertTerminal2MG(char))
+            mg_stack.append(convertTerminal2MG(char))
             i += 1
     ret_mg = MyGraph()
     ret_mg.first, ret_mg.last = nextNode(), nextNode()

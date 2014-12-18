@@ -34,8 +34,19 @@ def checkTerminals(list_sets, transition_table, terminal):
     return list_sets
 
 def checkForDivision(list_sets, transition_table, terminals):
-    for terminal in terminals:
-        list_sets = checkTerminals(list_sets, transition_table, terminal)
+    if len(terminals) == 0:
+        return list_sets
+    terminals = list(terminals)
+    cnt = 0
+    old_length = len(list_sets)
+    while True:
+        list_sets = checkTerminals(list_sets, transition_table, terminals[cnt])
+        cnt += 1
+        if len(list_sets) != old_length:
+            cnt = 0
+        old_length = len(list_sets)
+        if cnt >= len(terminals):
+            break
     return list_sets
 
 def toBeCombined(rules, list_sets):
@@ -44,16 +55,24 @@ def toBeCombined(rules, list_sets):
             return sets
     raise Exception('Not such rules in list_sets')
 
-def drawMinDFA(min_transition_table, list_sets):
+def isAcceptableStates(combinded_state, original_acceptable_states):
+    for state in original_acceptable_states:
+        if state in combinded_state:
+            return True
+    return False
+
+def drawMinDFA(min_transition_table, acceptable_states, list_sets):
     reverse = {}
     cnt = 0
+    g = nx.MultiDiGraph()
     for sets in list_sets:
         if set([]) in sets:
             continue
         reverse[frozenset(sets)] = cnt
+        if isAcceptableStates(frozenset(sets), acceptable_states):
+            g.add_node(cnt, label='accept')
         cnt += 1
 
-    g = nx.MultiDiGraph()
     for rule in min_transition_table:
         if set([]) in rule:
             continue
@@ -77,7 +96,11 @@ def constructMinDFA(transition_table, all_states, acceptable_states, terminals):
         for r in min_transition_table[rules]:
             sets = toBeCombined(min_transition_table[rules][r], list_sets)
             min_transition_table[rules][r] = sets
-    return drawMinDFA(min_transition_table, list_sets)
+    return drawMinDFA(min_transition_table, acceptable_states, list_sets)
+
+def printTransitionTable(table):
+    for rule in table:
+        print rule, table[rule]
 
 def test():
     re = generateRE.generateRE()

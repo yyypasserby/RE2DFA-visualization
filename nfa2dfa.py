@@ -66,8 +66,10 @@ def constructDFA(transition_table, all_sets, acceptable_states):
         cnt += 1
     g = nx.MultiDiGraph()
     for k,v in transition_table.items():
+        if len(k) == 0: continue
         f = reverse[k]
         for tran, next_set in v.items():
+            if len(next_set) == 0: continue
             g.add_edge(f, reverse[next_set], label=tran)
     for state in acceptable_states:
         g.node[reverse[state]]['label'] = 'accept'
