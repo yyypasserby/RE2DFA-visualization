@@ -17,6 +17,9 @@ class MyGraph:
         self.first = -1
         self.last  = -1
 
+    def __str__(self):
+        return str(self.first) + '--' + str(self.graph[self.first]) + '--' + str(self.last)
+
 def findParenthesis(string, pos):
     temp, i = -1, pos
     while i != len(string) and temp != 0:
@@ -36,6 +39,11 @@ def convertTerminal2MG(terminal):
     mg.graph.add_edge(mg.first, mg.last, label=terminal)
     return mg
 
+def printList(l):
+    for i in l:
+        print i, ' ',
+    print 
+
 def convert(input_str):
     if len(input_str) == 0:
         return False
@@ -52,7 +60,7 @@ def convert(input_str):
             if char == '*':
                 prev = mg_stack.pop()
                 sub_mg = repeat(prev)
-                mg_stack.append(prev)
+                mg_stack.append(sub_mg)
                 i += 1
             if char == '|':
                 mg_stack.append(char)
@@ -84,7 +92,11 @@ def union(mg1, mg2):
     return mg1
 
 def repeat(mg):
-    mg.graph.add_edge(mg.last, mg.first, label='epsilon')
+    first_nexts = [(i, mg.graph[mg.first][i][0]['label']) for i in mg.graph[mg.first]]
+    for n, v in first_nexts:
+        mg.graph.add_edge(mg.last, n, label=v)
+    mg.graph.remove_node(mg.first)
+    mg.first = mg.last
     return mg
 
 def concat(mg1, mg2):
