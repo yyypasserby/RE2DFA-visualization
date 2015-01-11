@@ -1,5 +1,4 @@
 import networkx as nx
-import matplotlib
 import os
 from generateRE import generateRE
 from collections import deque
