@@ -64,15 +64,17 @@ def constructDFA(transition_table, all_sets, acceptable_states):
     for m_set in all_sets:
         reverse[m_set] = cnt
         cnt += 1
-    g = nx.MultiDiGraph()
+    g = public.MyGraph()
+    g.first = all_sets[0]
+    g.last = acceptable_states
     for k,v in transition_table.items():
         if len(k) == 0: continue
         f = reverse[k]
         for tran, next_set in v.items():
             if len(next_set) == 0: continue
-            g.add_edge(f, reverse[next_set], label=tran)
+            g.graph.add_edge(f, reverse[next_set], label=tran)
     for state in acceptable_states:
-        g.node[reverse[state]]['label'] = 'accept'
+        g.graph.node[reverse[state]]['label'] = 'accept'
     return g, reverse
 
 def test():
@@ -83,7 +85,7 @@ def test():
 
     transition_table, all_sets, acceptable_states = constructTransitionTable(terminal_table, nfa)
     dfa, reverse = constructDFA(transition_table, all_sets, acceptable_states)
-    public.storeAsJPG(dfa, 'dfa')
+    public.storeAsJPG(dfa.graph, 'dfa')
         
 
 if __name__ == '__main__':

@@ -61,17 +61,23 @@ def isAcceptableStates(combinded_state, original_acceptable_states):
             return True
     return False
 
-def drawMinDFA(min_transition_table, acceptable_states, list_sets):
+def drawMinDFA(min_transition_table, begin_state, acceptable_states, list_sets):
     reverse = {}
     cnt = 0
-    g = nx.MultiDiGraph()
+    g = public.MyGraph()
+    min_acceptable_states = []
     for sets in list_sets:
         if set([]) in sets:
             continue
         reverse[frozenset(sets)] = cnt
+        if begin_state in sets:
+            g.first = frozenset(sets)
         if isAcceptableStates(frozenset(sets), acceptable_states):
-            g.add_node(cnt, label='accept')
+            g.graph.add_node(cnt, label='accept')
+            min_acceptable_states.append(frozenset(sets))
         cnt += 1
+
+    g.last = min_acceptable_states
 
     for rule in min_transition_table:
         if set([]) in rule:
@@ -80,23 +86,23 @@ def drawMinDFA(min_transition_table, acceptable_states, list_sets):
             if set([]) in min_transition_table[rule][trans]:
                 continue
             else:
-                g.add_edge(reverse[frozenset(rule)], reverse[frozenset(min_transition_table[rule][trans])], label=trans)
-    return g
+                g.graph.add_edge(reverse[frozenset(rule)], reverse[frozenset(min_transition_table[rule][trans])], label=trans)
+    return g, reverse
 
-def constructMinDFA(transition_table, all_states, acceptable_states, terminals):
+def constructMinDFA(transition_table, all_states, begin_state, acceptable_states, terminals):
     all_states = set(all_states)
     acceptable_states = set(acceptable_states)
     nonacceptable_states = all_states - acceptable_states
     list_sets = checkForDivision([acceptable_states, nonacceptable_states], transition_table, terminals)
     min_transition_table = {}
     for rules in transition_table:
-        sets = toBeCombined(rules, list_sets)        
+        sets = toBeCombined(rules, list_sets)
         min_transition_table[frozenset(sets)] = transition_table[rules]
     for rules in min_transition_table:
         for r in min_transition_table[rules]:
             sets = toBeCombined(min_transition_table[rules][r], list_sets)
             min_transition_table[rules][r] = sets
-    return drawMinDFA(min_transition_table, acceptable_states, list_sets)
+    return drawMinDFA(min_transition_table, begin_state, acceptable_states, list_sets)
 
 def printTransitionTable(table):
     for rule in table:
@@ -110,10 +116,10 @@ def test():
 
     transition_table, all_states, acceptable_states = n2d.constructTransitionTable(terminals, nfa)
     dfa, reverse_table = n2d.constructDFA(transition_table, all_states, acceptable_states)
-    public.storeAsJPG(dfa, 'dfa')
+    public.storeAsJPG(dfa.graph, 'dfa')
 
-    mindfa = constructMinDFA(transition_table, all_states, acceptable_states, terminals)
-    public.storeAsJPG(mindfa, 'min_dfa');
+    mindfa, min_reverse_table = constructMinDFA(transition_table, all_states, dfa.first, dfa.last, terminals)
+    public.storeAsJPG(mindfa.graph, 'min_dfa');
 
 if __name__ == '__main__':
     test()

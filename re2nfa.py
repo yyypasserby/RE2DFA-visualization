@@ -11,15 +11,6 @@ def nextNode():
     next_node += 1
     return next_node
 
-class MyGraph:
-    def __init__(self):
-        self.graph = nx.MultiDiGraph()
-        self.first = -1
-        self.last  = -1
-
-    def __str__(self):
-        return str(self.first) + '--' + str(self.graph[self.first]) + '--' + str(self.last)
-
 def findParenthesis(string, pos):
     temp, i = -1, pos
     while i != len(string) and temp != 0:
@@ -33,7 +24,7 @@ def findParenthesis(string, pos):
     raise Exception("Could not find a corresponding parenthesis")
 
 def convertTerminal2MG(terminal):
-    mg = MyGraph()
+    mg = public.MyGraph()
     mg.first = nextNode()
     mg.last = nextNode()
     mg.graph.add_edge(mg.first, mg.last, label=terminal)
@@ -68,7 +59,7 @@ def convert(input_str):
         elif isTerminalSymbol(char):
             mg_stack.append(convertTerminal2MG(char))
             i += 1
-    ret_mg = MyGraph()
+    ret_mg = public.MyGraph()
     ret_mg.first, ret_mg.last = nextNode(), nextNode()
     ret_mg.graph.add_nodes_from([ret_mg.first, ret_mg.last])
     prev = None
