@@ -18,6 +18,9 @@ def traversal_judge(min_dfa, reverse_table, string):
             if found: break
         if not found:
             return False
+
+    if 'accept' not in fa.nodes(data=True)[state][1].values():
+        return False
     return True
 
 def judge(re, string):
