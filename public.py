@@ -1,11 +1,12 @@
 import networkx as nx
 import os
 
-def storeAsJPG(mg, name='nfa'):
+def storeAsJPG(mg, name='nfa', openow=False):
     nx.draw_graphviz(mg)
     nx.write_dot(mg, name + '.dot')
     os.system('dot -Tjpg ' + name + '.dot -o ' + name + '.jpg')
-    os.system('open ' + name + '.jpg')
+    if openow:
+        os.system('open ' + name + '.jpg')
 
 class MyGraph:
     def __init__(self):
