@@ -6,23 +6,23 @@ import nfa2dfa as n2d
 import min_dfa 
 import io
 
-def storeAsJPG(mg, name='nfa', openow=False):
+def storeAsJPG(mg, name='nfa', openow=False, filetype='jpg'):
     nx.write_dot(mg, name + '.dot')
-    os.system('dot -Tjpg ' + name + '.dot -o ' + name + '.jpg')
+    os.system('dot -T' + filetype + ' ' + name + '.dot -o ' + name + '.' + filetype)
     if openow:
         os.system('open ' + name + '.jpg')
 
-def generateThreeFA(re, name):
+def generateThreeFA(re, name, filetype='jpg'):
     nfa = r2n.re2nfa(re)
-    storeAsJPG(nfa.graph, name + 'nfa')
+    storeAsJPG(nfa.graph, name + 'nfa', filetype=filetype)
     terminals = r2n.getAllTerminals(re)
 
     transition_table, all_states, acceptable_states = n2d.constructTransitionTable(terminals, nfa)
     dfa, reverse_table = n2d.constructDFA(transition_table, all_states, acceptable_states)
-    storeAsJPG(dfa.graph, name + 'dfa')
+    storeAsJPG(dfa.graph, name + 'dfa', filetype=filetype)
 
     mindfa, min_reverse_table = min_dfa.constructMinDFA(transition_table, all_states, dfa.first, dfa.last, terminals)
-    storeAsJPG(mindfa.graph, name + 'min_dfa');
+    storeAsJPG(mindfa.graph, name + 'min_dfa', filetype=filetype)
 
 
 
