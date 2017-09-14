@@ -1,4 +1,4 @@
-Lexical Analysis Visualization
+Regular Expression to minimized Deterministic Finite Automaton Visualization
 ==============================
 
 A visualization tools for process from re to nfa, dfa, min-dfa
