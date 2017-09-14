@@ -1,4 +1,4 @@
-Regular Expression to minimized Deterministic Finite Automaton Visualization
+A Visualization Tool for the transformation from Regular Expression to minimized Deterministic Finite Automaton 
 ==============================
 
 A visualization tools for process from re to nfa, dfa, min-dfa
