@@ -1,4 +1,4 @@
-lexical_analysis_visualization
+Lexical Analysis Visualization
 ==============================
 
 A visualization tools for process from re to nfa, dfa, min-dfa
