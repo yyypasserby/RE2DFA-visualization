@@ -9,11 +9,10 @@ A handy tool to visualize the process that converts Regular Expression (RE) to N
 - Networkx
 - matplotlib
 
-## Usage
+## Purpose
 
-- show the diagram to make it easier to understand the converting process.
-
-- a deeper understanding of generating **NFA** & **DFA** & **min-DFA**
+- Deeper understanding of generating **NFA** & **DFA** & **min-DFA**
+- Compare with the manual computation for correctness
 
 ## How to use
 
