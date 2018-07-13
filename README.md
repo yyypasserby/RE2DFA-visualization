@@ -1,32 +1,29 @@
 A Visualization Tool for the transformation from Regular Expression to minimized Deterministic Finite Automaton 
 ==============================
 
-A visualization tools for process from re to nfa, dfa, min-dfa
+A handy tool to visualize the process that converts Regular Expression (RE) to Nondeterministic Finite Automaton (NFA), Deterministic Finite Automaton (DFA) and Minimized Deterministic Finite Automaton (min-DFA).
 
-##Requirements
+## Requirements
 
 - Graphviz
 - Networkx
 - matplotlib
 
-##Usage
+## Usage
 
-- Show the visualized graph to the user and make it more direct and easy to understand.
+- show the diagram to make it easier to understand the converting process.
 
-- a deeper understanding of generating **nfa** & **dfa** & **min-dfa**
+- a deeper understanding of generating **NFA** & **DFA** & **min-DFA**
 
-- a homework for Compiler@SEU
+## How to use
 
-##How to use
-
-The project depends on python, you need to install all the requirements listed above. [Networkx](http://networkx.github.io/) and [matplotlib](http://matplotlib.org/) could be installed by python pip. [Graphviz](http://graphviz.org/) is a graph-generator, you could install it with the help of [this page](http://graphviz.org/Download.php).
+The tool is built with Python 2 and you need to install all the requirements above to run the project. [Networkx](http://networkx.github.io/) and [matplotlib](http://matplotlib.org/) can be installed by Python pip. [Graphviz](http://graphviz.org/), which is the graph-generator, can be installed with the help of [this page](http://graphviz.org/Download.php).
 
 Then,
 
 ```bash
-git clone git@github.com:yyypasserby/lexical_analysis_visualization.git lex
-cd lex
-pip install -r requirements.txt
+git clone git@github.com:yyypasserby/RE2DFA-visualization.git re2dfa
+cd re2dfa && pip install -r requirements.txt
 
 python judge.py
 ```
@@ -37,12 +34,12 @@ If you want to see the graph,
 python min_dfa.py
 ```
 
-You could change the regular expression in the ```generateRE.py```.
+You can change the regular expression in the ```generateRE.py```.
 
-##Some tips
-This lib is not fully tested. Any errors may occur.
+## Some tips
+This lib is not fully tested. Errors may occur.
 
-Supported regex:
+### Supported regex:
 
 - ()
 - |
