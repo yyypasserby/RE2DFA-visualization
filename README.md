@@ -1,4 +1,4 @@
-A Visualization Tool for the transformation from Regular Expression to minimized Deterministic Finite Automaton 
+RE2DFA Visualization
 ==============================
 
 A handy tool to visualize the process that converts Regular Expression (RE) to Nondeterministic Finite Automaton (NFA), Deterministic Finite Automaton (DFA) and Minimized Deterministic Finite Automaton (min-DFA).
@@ -39,7 +39,7 @@ You can change the regular expression in the ```generateRE.py```.
 ## Some tips
 This lib is not fully tested. Errors may occur.
 
-### Supported regex:
+### Support Regex:
 
 - ()
 - |
